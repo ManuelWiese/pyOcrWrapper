@@ -18,7 +18,7 @@ def tesseract(mat, config=None):
 def gocr(mat, encoding="utf-8"):
     p = Popen(["gocr", "-"], stdin=PIPE, stdout=PIPE)
     retval, buf = cv2.imencode(".pgm", mat)
-    # print buf
+
     p.stdin.write(buf)
     p.stdin.close()
     p.wait()
@@ -31,7 +31,7 @@ def gocr(mat, encoding="utf-8"):
 def ocrad(mat, encoding="utf-8"):
     p = Popen(["ocrad", "-"], stdin=PIPE, stdout=PIPE)
     retval, buf = cv2.imencode(".pgm", mat)
-    # print buf
+
     p.stdin.write(buf)
     p.stdin.close()
     p.wait()
@@ -42,9 +42,23 @@ def ocrad(mat, encoding="utf-8"):
 
 
 if __name__ == '__main__':
-    image = cv2.imread("joy_of_data.png", 0)
+    from time import time
 
+    image = cv2.imread("joy_of_data.png", 0)
     print("Original text: \"joy of data\"")
-    print("pytesseract:", tesseract(image))
-    print("gocr: ", gocr(image))
-    print("ocrad: ", ocrad(image))
+
+    number_of_runs = 10
+    pre = time()
+    for i in range(number_of_runs):
+        result = tesseract(image)
+    print("pytesseract: {}, took {}s for {} runs".format(result, time() - pre, number_of_runs))
+
+    pre = time()
+    for i in range(number_of_runs):
+        result = gocr(image)
+    print("gocr: {}, took {}s for {} runs".format(result, time() - pre, number_of_runs))
+
+    pre = time()
+    for i in range(number_of_runs):
+        result = ocrad(image)
+    print("ocrad: {}, took {}s for {} runs".format(result, time() - pre, number_of_runs))
