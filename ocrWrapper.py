@@ -1,7 +1,9 @@
 from PIL import Image
 import pytesseract
+import uuid
+import os
 
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, call
 
 import cv2
 
@@ -40,6 +42,24 @@ def ocrad(mat, encoding="utf-8"):
 
     return text.decode(encoding).strip("\n")
 
+def cuneiform(mat):
+    file_prefix = str(uuid.uuid4())
+    image_path = "/tmp/" + file_prefix + ".png"
+    data_path = "/tmp/" + file_prefix + ".txt"
+
+    cv2.imwrite(image_path, mat)
+
+    FNULL = open(os.devnull, 'w')
+    call(["cuneiform", image_path, "-o", data_path], stdout=FNULL)
+
+    with open(data_path) as file_handler:
+        value = file_handler.read()
+
+    os.remove(image_path)
+    os.remove(data_path)
+
+    return value.strip("\n")
+
 
 if __name__ == '__main__':
     from time import time
@@ -62,3 +82,8 @@ if __name__ == '__main__':
     for i in range(number_of_runs):
         result = ocrad(image)
     print("ocrad: {}, took {}s for {} runs".format(result, time() - pre, number_of_runs))
+
+    pre = time()
+    for i in range(number_of_runs):
+        result = cuneiform(image)
+    print("cuneiform: {}, took {}s for {} runs".format(result, time() - pre, number_of_runs))
