@@ -1,5 +1,5 @@
 # pyOcrWrapper
-## Use tesseract, gocr, ocrad or cuneiform on opencv images using this wrapper for python.
+## Use tesseract, gocr, ocrad or cuneiform on opencv images with this wrapper for python.
 A very small wrapper to call ocr software on opencv images.
 gocr, ocrad and cuneiform executables are needed in your path(if you want to use them).
 
