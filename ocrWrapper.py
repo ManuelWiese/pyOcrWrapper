@@ -68,22 +68,9 @@ if __name__ == '__main__':
     print("Original text: \"joy of data\"")
 
     number_of_runs = 10
-    pre = time()
-    for i in range(number_of_runs):
-        result = tesseract(image)
-    print("pytesseract: {}, took {}s for {} runs".format(result, time() - pre, number_of_runs))
 
-    pre = time()
-    for i in range(number_of_runs):
-        result = gocr(image)
-    print("gocr: {}, took {}s for {} runs".format(result, time() - pre, number_of_runs))
-
-    pre = time()
-    for i in range(number_of_runs):
-        result = ocrad(image)
-    print("ocrad: {}, took {}s for {} runs".format(result, time() - pre, number_of_runs))
-
-    pre = time()
-    for i in range(number_of_runs):
-        result = cuneiform(image)
-    print("cuneiform: {}, took {}s for {} runs".format(result, time() - pre, number_of_runs))
+    for function in [tesseract, gocr, ocrad, cuneiform]:
+        pre = time()
+        for i in range(number_of_runs):
+            result = function(image)
+        print("{}: {}, took {}s for {} runs".format(function.__name__, result, time() - pre, number_of_runs))
